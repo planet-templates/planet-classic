@@ -1,87 +1,119 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE html>
 <html>
 
-### Planet HTML template.
-### 
-### This is intended to demonstrate and document Planet's templating
-### facilities, and at the same time provide a good base for you to
-### modify into your own design.
-### 
-### The output's a bit boring though, if you're after less documentation
-### and more instant gratification, there's an example with a much
-### prettier output in the fancy-examples/ directory of the Planet source.
+<!--
+  Planet HTML template.
 
-### Lines like this are comments, and are automatically removed by the
-### templating engine before processing.
+  This is intended to demonstrate and document Planet's templating
+  facilities, and at the same time provide a good base for you to
+  modify into your own design.
 
+  The output's a bit boring though, if you're after less documentation
+  and more instant gratification, there's an example with a much
+  prettier output in the fancy-examples/ directory of the Planet source.
 
-### Planet makes a large number of variables available for your templates.
-### See INSTALL for the complete list.  The raw value can be placed in your
-### output file using <TMPL_VAR varname>.  We'll put the name of our
-### Planet in the page title and again in an h1.
+  Lines like this are comments, and are automatically removed by the
+  templating engine before processing.
+
+  Planet makes a large number of variables available for your templates.
+  See INSTALL for the complete list.  The raw value can be placed in your
+  output file using <%= varname>.  We'll put the name of our
+  Planet in the page title and again in an h1.
+-->
  
 <head>
-<title><TMPL_VAR name></title>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<meta name="generator" content="<TMPL_VAR generator ESCAPE="HTML">">
+  <meta charset='utf-8'>
+  <meta name='generator' content='<%= Pluto.generator %>'>
+
+  <title><%= site.title %></title>
 </head>
 
 <body>
-<h1><TMPL_VAR name></h1>
+<h1><%= site.title %></h1>
 
-### One of the two loops available is the Channels loop.  This allows you
-### to easily create a list of subscriptions, which is exactly what we'll do
-### here.
+<!--
+  One of the two loops available is the Channels loop.  This allows you
+  to easily create a list of subscriptions, which is exactly what we'll do
+  here.
 
-### Note that we can also expand variables inside HTML tags, but we need
-### to be cautious and HTML-escape any illegal characters using the form
-### <TMPL_VAR varname ESCAPE="HTML">
+  Note that we can also expand variables inside HTML tags, but we need
+  to be cautious and HTML-escape any illegal characters using the form
+ <TMPL_VAR varname ESCAPE="HTML">
+-->
 
 <div style="float: right">
 <h2>Subscriptions</h2>
 <ul>
-<TMPL_LOOP Channels>
-<li><a href="<TMPL_VAR link ESCAPE="HTML">" title="<TMPL_VAR title ESCAPE="HTML">"><TMPL_VAR name></a> <a href="<TMPL_VAR url ESCAPE="HTML">">(feed)</a></li>
-</TMPL_LOOP>
+<!-- GB - fix: use site.subscriptions.each do instead of Feed
+    add  title: feed.title for <TMPL_VAR title ESCAPE="HTML"> ??
+  -->
+ <% Feed.all.each do |feed| %>  
+  <li>
+    <%= link_to feed.title, feed.url %>
+    <%= link_to '(feed)' feed.feed_url %>
+  </li>
+  <% end %>
 </ul>
 </div>
 
-### The other loop is the Items loop, which will get iterated for each
-### news item.
+<!--
+  The other loop is the Items loop, which will get iterated for each
+  news item.
+-->
 
-<TMPL_LOOP Items>
+<%
+   items = ItemCursor.new( Item.latest.limit(24) )
+   items.each do |item, new_date, new_feed|
+%>
 
-### Visually distinguish articles from different days by checking for
-### the new_date flag.  This demonstrates the <TMPL_IF varname> ... </TMPL_IF>
-### check.
+<!--
+  Visually distinguish articles from different days by checking for
+  the new_date flag.  This demonstrates the <TMPL_IF varname> ... </TMPL_IF>
+  check.
+-->
 
-<TMPL_IF new_date>
-<h2><TMPL_VAR new_date></h2>
-</TMPL_IF>
+<% if new_date %>
+<h2><%= item.published_at %></h2>
+<% end %>
 
-### Group consecutive articles by the same author together by checking
-### for the new_channel flag.
+<!--
+  Group consecutive articles by the same author together by checking
+  for the new_feed flag.
+-->
 
-<TMPL_IF new_channel>
-<h3><a href="<TMPL_VAR channel_link ESCAPE="HTML">" title="<TMPL_VAR channel_title ESCAPE="HTML">"><TMPL_VAR channel_name></a></h3>
-</TMPL_IF>
+<% if new_feed %>
+<h3><%= link_to item.feed.title, item.feed.url %></h3>
+<% end %>
 
-
+<!-- GB: check
+   planet planet
+     is using var name  for author (e.g a person's name - always required)
+     and using var title for the site title (not the author's name) - optional
+     
+     fix: make name a property different from title in schema!!! why? why not??
 <TMPL_IF title>
 <h4><a href="<TMPL_VAR link ESCAPE="HTML">"><TMPL_VAR title></a></h4>
 </TMPL_IF>
+  -->
 <p>
-<TMPL_VAR content>
+<%= textify( item.summary ) %>
 </p>
+
 <p>
-<em><a href="<TMPL_VAR link ESCAPE="HTML">"><TMPL_IF author>by <TMPL_VAR author> at </TMPL_IF><TMPL_VAR date></a></em>
+<em><a href="<TMPL_VAR link ESCAPE="HTML">">
+  <TMPL_IF author>
+     by <TMPL_VAR author> at
+  </TMPL_IF>
+  <TMPL_VAR date>
+</a></em>
 </p>
-</TMPL_LOOP>
+
+<% end %>
 
 <hr>
 <p>
-<a href="http://www.planetplanet.org/">Powered by Planet!</a><br>
-<em>Last updated: <TMPL_VAR date></em>
+<%= link_to 'Powered by Pluto', 'https://github/feedreader' %><br>
+<em>Last updated: <%= site.fetched_at %></em>
 </p>
 </body>
 
