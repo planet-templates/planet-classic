@@ -29,7 +29,7 @@ and Tomas Styblo's templating engine; last release version 2.0 in 2006.
                                    |     ItemCursor.new( items ).each do |item,new_date,new_feed| %>
                                    |
       <TMPL_IF new_date>           |    <% if new_date %>
-        <TMPL_VAR new_date>        |      <%= item.published_at %>
+        <TMPL_VAR new_date>        |      <%= item.published %>
       </TMPL_IF>                   |    <% end %>
                                    |
       <TMPL_IF new_channel>        |    <% if new_feed %>
@@ -44,14 +44,14 @@ and Tomas Styblo's templating engine; last release version 2.0 in 2006.
                                    |
       <TMPL_VAR content>           |    <% item.content %>
       <TMPL_VAR link>              |    <% item.url %>  or  <% item.link %>
-      <TMPL_VAR date>              |    <% item.published_at %>
+      <TMPL_VAR date>              |    <% item.published %>
                                    |
       <TMPL_IF author>             |
         <TMPL_VAR author>          |    to be done
       </TMPL_IF>                   |
     </TMPL_LOOP>                   |  <% end %>
     
-    <TMPL_VAR date>                |  <%= site.fetched_at %>     # site (planet) last updated
+    <TMPL_VAR date>                |  <%= site.fetched %>     # site (planet) last updated
 
 
 
