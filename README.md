@@ -18,7 +18,7 @@ and Tomas Styblo's templating engine; last release version 2.0 in 2006.
     <TMPL_VAR name>                |  <%= site.title %>  or  <%= site.name %>
     <TMPL_VAR generator>           |  <%= Pluto.generator %>
     
-    <TMPL_LOOP Channels>           |  <% site.feeds do |feed| %>
+    <TMPL_LOOP Channels>           |  <% site.feeds.each do |feed| %>
        <TMPL_VAR link>             |    <%= feed.url %>  or  <%= feed.link %>
        <TMPL_VAR name>             |    <%= feed.title %>  or  <%= feed.name %>
        <TMPL_VAR title>            |    <%= feed.title2 %>
