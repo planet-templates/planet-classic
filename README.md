@@ -15,14 +15,14 @@ and Tomas Styblo's templating engine; last release version 2.0 in 2006.
 
 ## Template Cheatsheet - Planet Planet | Pluto
 
-    <TMPL_VAR name>                |  <%= site.name %>  or  <%= site.title %>
+    <TMPL_VAR name>                |  <%= site.title %>  or  <%= site.name %>
     <TMPL_VAR generator>           |  <%= Pluto.generator %>
     
     <TMPL_LOOP Channels>           |  <% site.feeds do |feed| %>
-       <TMPL_VAR link>             |    <%= feed.link %>  or  <%= feed.url %>
-       <TMPL_VAR name>             |    <%= feed.name %>  or  <%= feed.title %>
+       <TMPL_VAR link>             |    <%= feed.url %>  or  <%= feed.link %>
+       <TMPL_VAR name>             |    <%= feed.title %>  or  <%= feed.name %>
        <TMPL_VAR title>            |    <%= feed.title2 %>
-       <TMPL_VAR url>              |    <%= feed.feed %>  or  <%= feed.feed_url %>
+       <TMPL_VAR url>              |    <%= feed.feed_url %>  or  <%= feed.feed %>
     </TMPL_LOOP>                   |  <% end %>
     
     <TMPL_LOOP Items>              |  <% items = site.items.latest.limit(24)
@@ -33,18 +33,17 @@ and Tomas Styblo's templating engine; last release version 2.0 in 2006.
       </TMPL_IF>                   |    <% end %>
                                    |
       <TMPL_IF new_channel>        |    <% if new_feed %>
-        <TMPL_VAR channel_link>    |      <%= item.feed.link %> or <%= item.feed.url %>
-        <TMPL_VAR channel_name>    |      <%= item.feed.name %> or <%= item.feed.title %>
+        <TMPL_VAR channel_link>    |      <%= item.feed.url %>  or  <%= item.feed.link %>
+        <TMPL_VAR channel_name>    |      <%= item.feed.title %>  or  <%= item.feed.name %>
         <TMPL_VAR channel_title>   |      <%= item.feed.title2 %>
       </TMPL_IF>                   |    <% end %>
                                    |
       <TMPL_IF title>              |    <% if item.title %>
-        <TMPL_VAR link>            |      <%= item.link %> or <% item.url %>
         <TMPL_VAR title>           |      <%= item.title %>
       </TMPL_IF>                   |    <% end %>
                                    |
       <TMPL_VAR content>           |    <% item.content %>
-      <TMPL_VAR link>              |    <% item.link %> or <% item.url %>
+      <TMPL_VAR link>              |    <% item.url %>  or  <% item.link %>
       <TMPL_VAR date>              |    <% item.published_at %>
                                    |
       <TMPL_IF author>             |
