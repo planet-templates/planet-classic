@@ -32,43 +32,37 @@
 <h1><%= site.title %></h1>
 
 <!--
-  One of the two loops available is the Channels loop.  This allows you
+  One of the two loops available is the feeds loop.  This allows you
   to easily create a list of subscriptions, which is exactly what we'll do
   here.
-
-  Note that we can also expand variables inside HTML tags, but we need
-  to be cautious and HTML-escape any illegal characters using the form
- <TMPL_VAR varname ESCAPE="HTML">
 -->
 
 <div style="float: right">
 <h2>Subscriptions</h2>
 <ul>
-<!-- GB - fix: use site.subscriptions.each do instead of Feed
-    add  title: feed.title for <TMPL_VAR title ESCAPE="HTML"> ??
-  -->
- <% Feed.all.each do |feed| %>  
+  <% site.feeds.each do |feed| %>  
   <li>
-    <%= link_to feed.title, feed.url %>
+    <%= link_to feed.title, feed.url, title: feed.title2 %>
     <%= link_to '(feed)' feed.feed_url %>
   </li>
   <% end %>
 </ul>
 </div>
 
+
 <!--
-  The other loop is the Items loop, which will get iterated for each
+  The other loop is the items loop, which will get iterated for each
   news item.
 -->
 
 <%
-   items = ItemCursor.new( Item.latest.limit(24) )
-   items.each do |item, new_date, new_feed|
+   items = site.items.latest.limit(24)
+   ItemCursors.new( items ).each do |item, new_date, new_feed|
 %>
 
 <!--
   Visually distinguish articles from different days by checking for
-  the new_date flag.  This demonstrates the <TMPL_IF varname> ... </TMPL_IF>
+  the new_date flag.  This demonstrates the <% if varname %> ... <% end %>
   check.
 -->
 
@@ -82,23 +76,19 @@
 -->
 
 <% if new_feed %>
-<h3><%= link_to item.feed.title, item.feed.url %></h3>
+<h3><%= link_to item.feed.title, item.feed.url, title: item.feed.title2 %></h3>
 <% end %>
 
-<!-- GB: check
-   planet planet
-     is using var name  for author (e.g a person's name - always required)
-     and using var title for the site title (not the author's name) - optional
-     
-     fix: make name a property different from title in schema!!! why? why not??
-<TMPL_IF title>
-<h4><a href="<TMPL_VAR link ESCAPE="HTML">"><TMPL_VAR title></a></h4>
-</TMPL_IF>
-  -->
-<p>
-<%= textify( item.summary ) %>
-</p>
 
+<% if item.title %>
+<h4><%= link_to item.title, item.url %></h4>
+<% end %>
+
+<div>
+<%= textify( item.content ) %>
+</div>
+
+<!--
 <p>
 <em><a href="<TMPL_VAR link ESCAPE="HTML">">
   <TMPL_IF author>
@@ -107,6 +97,7 @@
   <TMPL_VAR date>
 </a></em>
 </p>
+-->
 
 <% end %>
 
