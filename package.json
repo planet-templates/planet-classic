@@ -1,0 +1,21 @@
+{
+  "name": "planet-classic",
+  "version": "0.1.0",
+  "description": "classic - planet template pack - planet planet style",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/planet-templates/planet-classic.git"
+  },
+  "keywords": [
+    "planet",
+    "pluto",
+    "classic",
+    "planet-templates"
+  ],
+  "author": "Gerald Bauer",
+  "license": "Public Domain",
+  "bugs": {
+    "url": "https://github.com/planet-templates/planet-classic/issues"
+  },
+  "homepage": "https://github.com/planet-templates/planet-classic"
+}
