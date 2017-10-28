@@ -57,5 +57,5 @@ and Tomas Styblo's templating engine; last release version 2.0 in 2006.
 
 ## Questions? Comments?
 
-Send them along to the [Planet Pluto and Friends Forum/Mailing List](http://groups.google.com/group/feedreader).
+Send them along to the [wwwmake Forum/Mailing List](http://groups.google.com/group/wwwmake).
 Thanks!
